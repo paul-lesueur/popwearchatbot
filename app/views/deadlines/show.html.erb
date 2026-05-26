@@ -1,0 +1,47 @@
+<h1><%= @deadline.title %></h1>
+
+<p>
+  <strong>Description :</strong>
+  <%= @deadline.description %>
+</p>
+
+<p>
+  <strong>Catégorie :</strong>
+  <%= @deadline.category %>
+</p>
+
+<p>
+  <strong>Date limite :</strong>
+  <%= @deadline.due_date %>
+</p>
+
+<% if @deadline.estimated_duration.present? %>
+  <p>
+    <strong>Durée estimée sauvegardée :</strong>
+    <%= @deadline.estimated_duration %> minutes
+  </p>
+<% end %>
+
+<hr>
+
+<h2>Estimation IA de la durée</h2>
+
+<p>
+  L’IA va analyser la tâche, poser des questions de précision si besoin,
+  puis proposer une estimation de durée.
+</p>
+
+<%= button_to "Demander une estimation à l’IA",
+              estimate_duration_deadline_path(@deadline),
+              method: :patch,
+              class: "btn btn-primary" %>
+
+<% if defined?(@ai_response) && @ai_response.present? %>
+  <hr>
+
+  <h3>Réponse de l’IA</h3>
+
+  <div>
+    <%= simple_format(@ai_response) %>
+  </div>
+<% end %>

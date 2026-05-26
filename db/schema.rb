@@ -63,3 +63,4 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_26_124843) do
   add_foreign_key "deadlines", "users"
   add_foreign_key "messages", "chats"
 end
+

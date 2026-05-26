@@ -1,0 +1,41 @@
+<%= form_with model: @deadline do |f| %>
+  <% if @deadline.errors.any? %>
+    <div role="alert">
+      <h2><%= pluralize(@deadline.errors.count, "erreur") %> ont empêché l'enregistrement :</h2>
+      <ul>
+        <% @deadline.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title, "Titre" %>
+    <%= f.text_field :title, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :description, "Description" %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :category, "Catégorie" %>
+    <%= f.select :category, Deadline.categories.keys.map { |k| [k.humanize, k] } %>
+  </div>
+
+  <div>
+    <%= f.label :due_date, "Date d'échéance" %>
+    <%= f.date_field :due_date %>
+  </div>
+
+  <div>
+    <%= f.label :status, "Statut" %>
+    <%= f.select :status, Deadline.statuses.keys.map { |k| [k.humanize, k] } %>
+  </div>
+
+  <div>
+    <%= f.submit @deadline.new_record? ? "Créer l'échéance" : "Mettre à jour" %>
+  </div>
+<% end %>

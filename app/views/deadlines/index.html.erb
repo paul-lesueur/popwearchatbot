@@ -1,0 +1,20 @@
+<h1>Mes échéances</h1>
+
+<%= link_to "+ Nouvelle échéance", new_deadline_path %>
+
+<% if @deadlines.any? %>
+  <ul>
+    <% @deadlines.each do |deadline| %>
+      <li>
+        <%= link_to deadline.title, deadline_path(deadline) %>
+        — <%= deadline.category.humanize %>
+        — <%= l(deadline.due_date, format: :long) %>
+        — <%= deadline.status.humanize %>
+        <%= link_to "Modifier", edit_deadline_path(deadline) %>
+        <%= button_to "Supprimer", deadline_path(deadline), method: :delete, form: { data: { turbo_confirm: "Supprimer cette échéance ?" } } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Aucune échéance pour le moment.</p>
+<% end %>

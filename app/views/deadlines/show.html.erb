@@ -1,0 +1,21 @@
+<h1><%= @deadline.title %></h1>
+
+<dl>
+  <dt>Catégorie</dt>
+  <dd><%= @deadline.category.humanize %></dd>
+
+  <dt>Date d'échéance</dt>
+  <dd><%= l(@deadline.due_date, format: :long) %></dd>
+
+  <dt>Statut</dt>
+  <dd><%= @deadline.status.humanize %></dd>
+
+  <% if @deadline.description.present? %>
+    <dt>Description</dt>
+    <dd><%= simple_format(@deadline.description) %></dd>
+  <% end %>
+</dl>
+
+<%= link_to "Modifier", edit_deadline_path(@deadline) %>
+<%= button_to "Supprimer", deadline_path(@deadline), method: :delete, form: { data: { turbo_confirm: "Supprimer cette échéance ?" } } %>
+<%= link_to "Retour à la liste", deadlines_path %>

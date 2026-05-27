@@ -1,4 +1,6 @@
-<h2>Sign up</h2>
+<h1 class="devise-card__title">Créer un compte</h1>
+
+<p class="devise-card__subtitle">Connectez-vous avec votre e-mail</p>
 
 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= f.error_notification %>
@@ -7,19 +9,27 @@
     <%= f.input :email,
                 required: true,
                 autofocus: true,
-                input_html: { autocomplete: "email" }%>
+                label: false,
+                placeholder: "Email",
+                input_html: { autocomplete: "email" } %>
     <%= f.input :password,
                 required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                label: false,
+                placeholder: "Mot de passe",
+                hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
                 input_html: { autocomplete: "new-password" } %>
     <%= f.input :password_confirmation,
                 required: true,
+                label: false,
+                placeholder: "Confirmer le mot de passe",
                 input_html: { autocomplete: "new-password" } %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.button :submit, "S'inscrire" %>
   </div>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<p class="devise-card__footer">
+  Vous êtes déjà inscrit ? <%= link_to "Se connecter", new_session_path(resource_name) %>
+</p>

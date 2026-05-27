@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Mes échéances</h1>
+    <%= link_to new_deadline_path, class: "btn btn-create" do %>
+      <span class="plus-icon">+</span> Nouvelle échéance
+    <% end %>
+  </div>
+
+  <!-- Filtres par catégorie -->
+  <div class="mb-4">
+    <%= link_to "Toutes", deadlines_path,
+        class: "btn #{params[:category].blank? ? 'btn-dark' : 'btn-outline-dark'} me-2 mb-2" %>
+
+    <% [["client", "Client"], ["atelier", "Atelier"], ["administratif", "Administratif"], ["comptable", "Comptable"]].each do |value, label| %>
+      <%= link_to label, deadlines_path(category: value),
+          class: "btn #{params[:category] == value ? 'btn-dark' : 'btn-outline-dark'} me-2 mb-2" %>
+    <% end %>
+  </div>
+
+  <!-- Liste des échéances -->
+  <% if @deadlines.any? %>
+    <div class="row">
+      <% @deadlines.each do |deadline| %>
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card deadline-card <%= urgency_class(deadline) %>">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">
+                  <%= link_to deadline.title, deadline_path(deadline), class: "deadline-link" %>
+                </h5>
+                <span class="badge bg-secondary"><%= deadline.category.humanize %></span>
+              </div>
+
+              <% if deadline.description.present? %>
+                <p class="card-text"><%= deadline.description %></p>
+              <% end %>
+
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">
+                  📅 <%= l(deadline.due_date, format: :long) %>
+                </small>
+                <strong class="urgency-label"><%= urgency_label(deadline) %></strong>
+              </div>
+
+              <div class="mb-3">
+                <small class="badge bg-light text-dark"><%= deadline.status.humanize %></small>
+              </div>
+
+              <div class="deadline-actions">
+                <%= link_to "Modifier", edit_deadline_path(deadline), class: "btn btn-sm btn-outline-dark me-2" %>
+                <%= button_to "Supprimer", deadline_path(deadline),
+                    method: :delete,
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { data: { turbo_confirm: "Supprimer cette échéance ?" }, class: "d-inline" } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <% if params[:category].present? %>
+        Aucune échéance dans cette catégorie.
+      <% else %>
+        Aucune échéance pour le moment.
+      <% end %>
+    </div>
+  <% end %>
+</div>

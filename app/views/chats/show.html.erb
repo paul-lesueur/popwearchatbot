@@ -1,141 +1,59 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-8">
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><%= @deadline.title %></h1>
 
-      <div class="d-flex justify-content-between align-items-start mb-4">
-        <div>
-          <p class="text-uppercase text-muted small fw-semibold mb-2">
-            Assistant IA
-          </p>
+    <%= link_to "← Retour aux échéances", deadlines_path, class: "btn btn-outline-dark" %>
+  </div>
 
-          <h1 class="h2 fw-bold mb-2">
-            Message client assisté
-          </h1>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="mb-3">
+        <span class="badge bg-secondary">
+          <%= @deadline.category&.humanize || "Non classé" %>
+        </span>
 
-          <p class="text-muted mb-0">
-            Génère une réponse claire, professionnelle et prête à envoyer à ton client.
-          </p>
-        </div>
-
-        <span class="badge rounded-pill text-bg-warning px-3 py-2">
-          Popwear IA
+        <span class="badge bg-light text-dark">
+          <%= @deadline.status&.humanize || "Todo" %>
         </span>
       </div>
 
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
-            <div>
-              <h2 class="h5 fw-bold mb-2">
-                <%= @deadline.title %>
-              </h2>
+      <% if @deadline.description.present? %>
+        <p class="card-text">
+          <%= @deadline.description %>
+        </p>
+      <% end %>
 
-              <p class="text-muted mb-0">
-                <%= @deadline.description %>
-              </p>
-            </div>
+      <p class="text-muted">
+        📅 Date limite :
+        <strong><%= l(@deadline.due_date, format: :long) if @deadline.due_date.present? %></strong>
+      </p>
 
-            <span class="badge text-bg-light border">
-              <%= @deadline.status %>
-            </span>
-          </div>
+      <% if @deadline.estimated_duration.present? %>
+        <p class="text-muted">
+          ⏱️ Durée estimée :
+          <strong><%= @deadline.estimated_duration %> minutes</strong>
+        </p>
+      <% end %>
 
-          <hr class="my-4">
+      <div class="d-flex gap-2 flex-wrap mt-4">
+        <%= link_to "Modifier", edit_deadline_path(@deadline), class: "btn btn-outline-dark" %>
 
-          <div class="row g-3 small">
-            <div class="col-12 col-md-4">
-              <p class="text-muted mb-1">Catégorie</p>
-              <p class="fw-semibold mb-0"><%= @deadline.category %></p>
-            </div>
+        <%= button_to "Estimer la durée avec l'IA",
+          estimate_duration_deadline_path(@deadline),
+          method: :patch,
+          class: "btn btn-outline-primary" %>
 
-            <div class="col-12 col-md-4">
-              <p class="text-muted mb-1">Date limite</p>
-              <p class="fw-semibold mb-0"><%= @deadline.due_date %></p>
-            </div>
+        <%= button_to "Générer un message client",
+          deadline_chats_path(@deadline),
+          method: :post,
+          class: "btn btn-primary" %>
 
-            <div class="col-12 col-md-4">
-              <p class="text-muted mb-1">Statut</p>
-              <p class="fw-semibold mb-0"><%= @deadline.status %></p>
-            </div>
-          </div>
-        </div>
+        <%= button_to "Supprimer",
+          deadline_path(@deadline),
+          method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Supprimer cette échéance ?" } } %>
       </div>
-
-      <% assistant_message = @messages.where(role: "assistant").last %>
-
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-
-          <% if assistant_message.present? %>
-            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
-              <div>
-                <h2 class="h5 fw-bold mb-2">
-                  Message proposé
-                </h2>
-
-                <p class="text-muted small mb-0">
-                  Tu peux modifier le texte avant de le copier et de l’envoyer au client.
-                </p>
-              </div>
-
-              <span class="badge text-bg-success">
-                Généré
-              </span>
-            </div>
-
-            <textarea
-              id="client-message"
-              class="form-control mb-3"
-              rows="8"
-            ><%= assistant_message.content %></textarea>
-
-            <div class="d-flex flex-column flex-sm-row gap-2">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                onclick="navigator.clipboard.writeText(document.getElementById('client-message').value); this.innerText = 'Copié !'">
-                Copier le message
-              </button>
-
-              <%= button_to "Régénérer avec l’IA",
-                chat_messages_path(@chat),
-                method: :post,
-                class: "btn btn-primary",
-                form: { class: "m-0" },
-                data: { turbo_submits_with: "Génération..." } %>
-            </div>
-
-          <% else %>
-            <div class="text-center py-5">
-              <div class="mb-3">
-                <span class="badge rounded-pill text-bg-light border px-3 py-2">
-                  Aucun message généré
-                </span>
-              </div>
-
-              <h2 class="h5 fw-bold mb-2">
-                Génère ton premier message client
-              </h2>
-
-              <p class="text-muted mb-4">
-                L’IA va préparer une réponse claire à partir des informations de cette deadline.
-              </p>
-
-              <%= button_to "Générer un message client",
-                chat_messages_path(@chat),
-                method: :post,
-                class: "btn btn-primary px-4",
-                data: { turbo_submits_with: "Génération..." } %>
-            </div>
-          <% end %>
-
-        </div>
-      </div>
-
-      <div class="mt-4">
-        <%= link_to "← Retour aux deadlines", deadlines_path, class: "text-decoration-none text-muted" %>
-      </div>
-
     </div>
   </div>
 </div>

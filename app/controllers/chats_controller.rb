@@ -2,9 +2,8 @@ class ChatsController < ApplicationController
   def create
     @deadline = current_user.deadlines.find(params[:deadline_id])
 
-    @chat = Chat.create!(
+    @chat = @deadline.chats.find_or_create_by!(
       user: current_user,
-      deadline: @deadline,
       title: "Message client"
     )
 

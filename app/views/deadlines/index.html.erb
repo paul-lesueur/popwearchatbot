@@ -43,7 +43,7 @@
               </div>
 
               <div class="mb-3">
-                <small class="badge bg-light text-dark"><%= deadline.status.humanize %></small>
+                <small class="badge bg-light text-dark"><%= deadline.status&.humanize || "Todo" %></small>
               </div>
 
               <div class="deadline-actions">

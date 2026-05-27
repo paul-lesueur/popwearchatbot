@@ -37,7 +37,8 @@ class DeadlinesController < ApplicationController
       @deadline.update(estimated_duration: estimated_duration.to_i)
     end
 
-    redirect_to deadline_path(@deadline), notice: "Estimation IA générée.
+    redirect_to deadline_path(@deadline), notice: "Estimation IA générée."
+  end
 
   def index
     @deadlines = current_user.deadlines.order(:due_date)
@@ -53,6 +54,7 @@ class DeadlinesController < ApplicationController
 
   def create
     @deadline = current_user.deadlines.new(deadline_params)
+
     if @deadline.save
       redirect_to deadlines_path, notice: "Échéance créée avec succès."
     else

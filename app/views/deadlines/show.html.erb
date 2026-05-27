@@ -27,16 +27,18 @@
 <h2>Estimation IA de la durée</h2>
 
 <p>
-  L’IA va analyser la tâche, poser des questions de précision si besoin,
-  puis proposer une estimation de durée.
+  L’IA va analyser la tâche, poser les questions de précision utiles,
+  puis proposer une première estimation de durée.
 </p>
 
-<%= button_to "Demander une estimation à l’IA",
-              estimate_duration_deadline_path(@deadline),
+<%= form_with url: estimate_duration_deadline_path(@deadline),
               method: :patch,
-              class: "btn btn-primary" %>
+              local: true,
+              data: { turbo: false } do %>
+  <%= submit_tag "Demander une estimation à l’IA", class: "btn btn-primary" %>
+<% end %>
 
-<% if defined?(@ai_response) && @ai_response.present? %>
+<% if @ai_response.present? %>
   <hr>
 
   <h3>Réponse de l’IA</h3>

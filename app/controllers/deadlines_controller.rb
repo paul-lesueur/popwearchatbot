@@ -7,37 +7,40 @@ class DeadlinesController < ApplicationController
 
   def estimate_duration
     prompt = <<~PROMPT
-      Tu es un assistant IA spécialisé en gestion de projet.
+      Tu es un assistant IA spécialisé en organisation et gestion du temps.
 
-      L'utilisateur veut estimer la durée d'une tâche.
+      L'utilisateur veut estimer la durée nécessaire pour réaliser une tâche.
 
-      Voici la tâche :
-      Titre : #{@deadline.title}
-      Description : #{@deadline.description}
-      Catégorie : #{@deadline.category}
-      Date limite : #{@deadline.due_date}
+      Informations connues :
+      - Titre : #{@deadline.title}
+      - Description : #{@deadline.description}
+      - Catégorie : #{@deadline.category}
+      - Date limite : #{@deadline.due_date}
 
       Ta mission :
-      1. Pose les questions de précision utiles si certaines informations manquent.
-      2. Propose ensuite une estimation réaliste de durée en minutes.
-      3. Termine par une phrase au format exact :
+      1. Analyse la tâche.
+      2. Pose les questions de précision qui seraient utiles avant d'estimer précisément la durée.
+      3. Donne quand même une première estimation prudente de durée.
+      4. Termine obligatoirement ta réponse par une ligne au format exact :
       ESTIMATION_MINUTES: nombre
 
-      Réponds en français, de façon claire et concise.
+      Contraintes :
+      - Réponds en français.
+      - Sois clair et concis.
+      - Le nombre doit être un entier en minutes.
+      - Ne mets aucun texte après la ligne ESTIMATION_MINUTES.
     PROMPT
 
-    response = RubyLLM.chat.ask(prompt)
+    response = RubyLLM.chat(model: "gpt-4o").ask(prompt)
 
     @ai_response = response.content
-
     estimated_duration = @ai_response[/ESTIMATION_MINUTES:\s*(\d+)/, 1]
 
     if estimated_duration.present?
       @deadline.update(estimated_duration: estimated_duration.to_i)
     end
 
-    flash.now[:notice] = "Réponse IA générée."
-    render :show, status: :ok
+    redirect_to deadline_path(@deadline), notice: "Estimation IA générée."
   end
 
   private

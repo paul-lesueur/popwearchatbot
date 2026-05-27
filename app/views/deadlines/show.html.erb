@@ -33,6 +33,72 @@
         <div class="deadline-description"><%= simple_format(@deadline.description) %></div>
       </div>
     <% end %>
+<h1><%= @deadline.title %></h1>
+
+<p>
+  <strong>Description :</strong>
+  <%= @deadline.description %>
+</p>
+
+<p>
+  <strong>Catégorie :</strong>
+  <%= @deadline.category&.humanize || "Non classé" %>
+</p>
+
+<p>
+  <strong>Date limite :</strong>
+  <%= @deadline.due_date %>
+</p>
+
+<% if @deadline.estimated_duration.present? %>
+  <p>
+    <strong>Durée estimée sauvegardée :</strong>
+    <%= @deadline.estimated_duration %> minutes
+  </p>
+<% end %>
+
+<hr>
+
+<h2>Estimation IA de la durée</h2>
+
+<p>
+  L'IA va analyser la tâche, poser les questions de précision utiles,
+  puis proposer une première estimation de durée.
+</p>
+
+<%= form_with url: estimate_duration_deadline_path(@deadline),
+              method: :patch,
+              local: true,
+              data: { turbo: false } do %>
+  <%= submit_tag "Demander une estimation à l'IA", class: "btn btn-primary" %>
+<% end %>
+
+<% if @ai_response.present? %>
+  <hr>
+
+  <h3>Réponse de l'IA</h3>
+
+  <div>
+    <%= simple_format(@ai_response) %>
+  </div>
+<% end %>
+
+<hr>
+
+<%= button_to "Générer un message client",
+  deadline_chats_path(@deadline),
+  method: :post,
+  class: "btn btn-primary" %>
+
+<dl>
+  <dt>Catégorie</dt>
+  <dd><%= @deadline.category&.humanize || "Non classé" %></dd>
+
+  <dt>Date d'échéance</dt>
+  <dd><%= l(@deadline.due_date, format: :long) if @deadline.due_date.present? %></dd>
+
+  <dt>Statut</dt>
+  <dd><%= @deadline.status&.humanize || "Todo" %></dd>
 
     <% if @deadline.estimated_duration.present? %>
       <div class="deadline-section">

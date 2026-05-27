@@ -1,43 +1,90 @@
-<%= form_with model: @deadline, class: "deadline-form" do |f| %>
-  <% if @deadline.errors.any? %>
-    <div role="alert" class="form-errors">
-      <h2><%= pluralize(@deadline.errors.count, "erreur") %> ont empêché l'enregistrement :</h2>
-      <ul>
-        <% @deadline.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+<div class="card border-0 shadow-sm rounded-4 p-4">
+  <%= form_with model: @deadline do |f| %>
+    <% if @deadline.errors.any? %>
+      <div class="alert alert-danger">
+        <h2 class="h5">
+          <%= pluralize(@deadline.errors.count, "erreur") %> ont empêché l'enregistrement :
+        </h2>
+
+        <ul class="mb-0">
+          <% @deadline.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :title, "Titre", class: "form-label fw-semibold" %>
+      <%= f.text_field :title,
+        required: true,
+        class: "form-control",
+        placeholder: "Ex : Préparer le dossier comptable" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, "Description", class: "form-label fw-semibold" %>
+      <%= f.text_area :description,
+        class: "form-control",
+        rows: 4,
+        placeholder: "Décris rapidement la tâche à réaliser..." %>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :category, "Catégorie", class: "form-label fw-semibold" %>
+        <%= f.select :category,
+          Deadline.categories.keys.map { |k| [k.humanize, k] },
+          { prompt: "Choisir une catégorie" },
+          class: "form-select" %>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <%= f.label :due_date, "Date d'échéance", class: "form-label fw-semibold" %>
+        <%= f.date_field :due_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <% if @deadline.estimated_duration.present? %>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Durée estimée par l'IA</label>
+        <div class="form-control bg-light">
+          <%= @deadline.estimated_duration %> minutes
+        </div>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= f.label :status, "Statut", class: "form-label fw-semibold" %>
+      <%= f.select :status,
+        Deadline.statuses.keys.map { |k| [k.humanize, k] },
+        {},
+        class: "form-select" %>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <%= f.submit @deadline.new_record? ? "Créer une échéance" : "Mettre à jour",
+        class: "btn btn-primary px-4" %>
+
+      <%= link_to "Retour à la liste",
+        deadlines_path,
+        class: "btn btn-outline-secondary" %>
     </div>
   <% end %>
+</div>
 
-  <div class="form-group">
-    <%= f.label :title, "Titre" %>
-    <%= f.text_field :title, required: true, class: "form-control", placeholder: "Ex. Livraison commande client" %>
-  </div>
+<% if @deadline.persisted? %>
+  <div class="card border-0 shadow-sm rounded-4 p-4 mt-4">
+    <h2 class="h5 mb-2">Estimation IA</h2>
 
-  <div class="form-group">
-    <%= f.label :description, "Description" %>
-    <%= f.text_area :description, class: "form-control", rows: 4, placeholder: "Détails de l'échéance…" %>
-  </div>
+    <p class="text-muted mb-3">
+      Demande à l'IA d'estimer le temps nécessaire pour réaliser cette échéance.
+    </p>
 
-  <div class="form-row">
-    <div class="form-group">
-      <%= f.label :category, "Catégorie" %>
-      <%= f.select :category, Deadline.categories.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :due_date, "Date d'échéance" %>
-      <%= f.date_field :due_date, class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :status, "Statut" %>
-      <%= f.select :status, Deadline.statuses.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
-    </div>
-  </div>
-
-  <div class="form-actions">
-    <%= f.submit (@deadline.new_record? ? "Créer l'échéance" : "Mettre à jour"), class: "btn btn-create" %>
+    <%= button_to "Demander une estimation à l'IA",
+      estimate_duration_deadline_path(@deadline),
+      method: :patch,
+      class: "btn btn-outline-primary",
+      form: { data: { turbo: false } } %>
   </div>
 <% end %>

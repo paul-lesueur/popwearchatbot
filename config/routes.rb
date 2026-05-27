@@ -18,5 +18,11 @@ Rails.application.routes.draw do
     member do
       patch :estimate_duration
     end
+
+    resources :chats, only: [:create, :show]
+  end
+
+  resources :chats, only: [] do
+    resources :messages, only: [:create]
   end
 end

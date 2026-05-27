@@ -28,11 +28,11 @@
                 <h5 class="card-title mb-0">
                   <%= link_to deadline.title, deadline_path(deadline), class: "deadline-link" %>
                 </h5>
-                <span class="badge bg-secondary"><%= deadline.category.humanize %></span>
+                <span class="badge bg-secondary"><%= category_label(deadline.category) %></span>
               </div>
 
               <% if deadline.description.present? %>
-                <p class="card-text"><%= deadline.description %></p>
+                <p class="card-text "><%= deadline.description %></p>
               <% end %>
 
               <div class="d-flex justify-content-between align-items-center mb-2">
@@ -43,7 +43,7 @@
               </div>
 
               <div class="mb-3">
-                <small class="badge bg-light text-dark"><%= deadline.status&.humanize || "Todo" %></small>
+                <small class="badge bg-light text-dark"><%= status_label(deadline.status) %></small>
               </div>
 
               <div class="deadline-actions">

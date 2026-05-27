@@ -34,7 +34,7 @@ module DeadlinesHelper
       "atelier" => "Atelier",
       "administratif" => "Administratif",
       "comptable" => "Comptable"
-    }[category]
+    }[category] || category
   end
 
   # Traduit les statuts de la BDD pour l'affichage
@@ -43,6 +43,6 @@ module DeadlinesHelper
       "todo" => "À faire",
       "in_progress" => "En cours",
       "done" => "Terminé"
-    }[status]
+    }[status] || status
   end
 end

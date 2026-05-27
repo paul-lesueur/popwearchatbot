@@ -1,15 +1,25 @@
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-  <div class="text-center">
-    <h1 class="display-4 fw-bold mb-3">Popwear</h1>
 
-    <p class="lead mb-4">
-      L’assistant IA qui aide les couturiers, retoucheurs et cordonniers à gérer leurs échéances.
+
+<div class="home-page">
+
+
+  <div class="home-content">
+
+    <h1 class="home-title">Popwear</h1>
+
+    <p class="home-subtitle">
+      L'assistant IA qui aide les couturiers, retoucheurs et cordonniers à gérer leurs échéances.
     </p>
 
-    <p class="text-muted mb-4">
-      Priorisez vos tâches, estimez vos délais et évitez les retards grâce à l’intelligence artificielle.
+    <p class="home-description">
+      Priorisez vos tâches, estimez vos délais et évitez les retards grâce à l'intelligence artificielle.
     </p>
 
-    <%= link_to "Commencer", deadlines_path, class: "btn btn-primary btn-lg" %>
+    <% if user_signed_in? %>
+      <%= link_to "Commencer →", deadlines_path, class: "btn-home-primary" %>
+    <% else %>
+      <%= link_to "Commencer →", new_user_session_path, class: "btn-home-primary" %>
+    <% end %>
+
   </div>
 </div>

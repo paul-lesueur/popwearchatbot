@@ -1,6 +1,6 @@
-<%= form_with model: @deadline do |f| %>
+<%= form_with model: @deadline, class: "deadline-form" do |f| %>
   <% if @deadline.errors.any? %>
-    <div role="alert">
+    <div role="alert" class="form-errors">
       <h2><%= pluralize(@deadline.errors.count, "erreur") %> ont empêché l'enregistrement :</h2>
       <ul>
         <% @deadline.errors.full_messages.each do |msg| %>
@@ -10,32 +10,34 @@
     </div>
   <% end %>
 
-  <div>
+  <div class="form-group">
     <%= f.label :title, "Titre" %>
-    <%= f.text_field :title, required: true %>
+    <%= f.text_field :title, required: true, class: "form-control", placeholder: "Ex. Livraison commande client" %>
   </div>
 
-  <div>
+  <div class="form-group">
     <%= f.label :description, "Description" %>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, class: "form-control", rows: 4, placeholder: "Détails de l'échéance…" %>
   </div>
 
-  <div>
-    <%= f.label :category, "Catégorie" %>
-    <%= f.select :category, Deadline.categories.keys.map { |k| [k.humanize, k] } %>
+  <div class="form-row">
+    <div class="form-group">
+      <%= f.label :category, "Catégorie" %>
+      <%= f.select :category, Deadline.categories.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :due_date, "Date d'échéance" %>
+      <%= f.date_field :due_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :status, "Statut" %>
+      <%= f.select :status, Deadline.statuses.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :due_date, "Date d'échéance" %>
-    <%= f.date_field :due_date %>
-  </div>
-
-  <div>
-    <%= f.label :status, "Statut" %>
-    <%= f.select :status, Deadline.statuses.keys.map { |k| [k.humanize, k] } %>
-  </div>
-
-  <div>
-    <%= f.submit @deadline.new_record? ? "Créer l'échéance" : "Mettre à jour" %>
+  <div class="form-actions">
+    <%= f.submit (@deadline.new_record? ? "Créer l'échéance" : "Mettre à jour"), class: "btn btn-create" %>
   </div>
 <% end %>

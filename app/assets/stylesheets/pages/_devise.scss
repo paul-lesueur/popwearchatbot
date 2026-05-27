@@ -1,0 +1,196 @@
+$devise-orange: #F18A4A;
+$devise-orange-dark: #E67E22;
+
+.devise-page {
+  min-height: 100vh;
+  display: flex;
+  background-color: #ffffff;
+}
+
+.devise-page__brand {
+  flex: 0 0 38%;
+  background: linear-gradient(180deg, #F4A06A 0%, $devise-orange 60%, #EC7A3F 100%);
+  border-top-right-radius: 80px;
+  border-bottom-right-radius: 80px;
+  padding: 48px 56px;
+  position: relative;
+  color: #ffffff;
+}
+
+.devise-page__logo-img {
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.devise-page__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 80px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.devise-page__logo-img {
+  position: absolute;
+  top: 40px;
+  left: 80px;
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+}
+
+.devise-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.devise-card__title {
+  font-family: $headers-font;
+  font-weight: 800;
+  font-size: 2.25rem;
+  color: #0E0000;
+  margin-bottom: 32px;
+}
+
+.devise-card__subtitle {
+  color: #0E0000;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.devise-card form .form-group,
+.devise-card form .mb-3 {
+  margin-bottom: 16px !important;
+}
+
+.devise-card .form-label {
+  display: none;
+}
+
+.devise-card .form-control {
+  border-radius: 14px;
+  border: 1px solid #E6E6E6;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+
+  &::placeholder {
+    color: #B5B5B5;
+  }
+
+  &:focus {
+    border-color: $devise-orange;
+    box-shadow: 0 0 0 3px rgba(241, 138, 74, 0.15);
+  }
+}
+
+.devise-card .form-check {
+  margin-bottom: 16px;
+}
+
+.devise-card .form-check-input:checked {
+  background-color: $devise-orange;
+  border-color: $devise-orange;
+}
+
+.devise-card .btn-primary,
+.devise-card .form-actions .btn {
+  background: $devise-orange;
+  border: none;
+  border-radius: 14px;
+  width: 100%;
+  padding: 14px 24px;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 1rem;
+  margin-top: 8px;
+  box-shadow: 0 6px 16px rgba(241, 138, 74, 0.3);
+  transition: transform 0.1s ease, background 0.2s ease;
+
+  &:hover {
+    background: $devise-orange-dark;
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.devise-card__footer {
+  margin-top: 24px;
+  font-size: 0.95rem;
+  color: #0E0000;
+
+  a {
+    color: $devise-orange;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.devise-card .alert {
+  border-radius: 12px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.devise-card .invalid-feedback {
+  font-size: 0.85rem;
+}
+
+.devise-card__links {
+  margin-top: 16px;
+
+  p {
+    margin-bottom: 4px;
+  }
+
+  a {
+    color: $devise-orange;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .devise-page {
+    flex-direction: column;
+  }
+
+  .devise-page__brand {
+    flex: 0 0 auto;
+    border-radius: 0 0 40px 40px;
+    padding: 32px 24px;
+    min-height: 120px;
+  }
+
+  .devise-page__content {
+    padding: 96px 24px 48px;
+  }
+
+  .devise-page__logo-img {
+    top: 24px;
+    left: 24px;
+    max-width: 140px;
+  }
+
+  .devise-card__title {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Popwear" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div class="devise-page">
+      <aside class="devise-page__brand"></aside>
+
+      <main class="devise-page__content">
+        <%= image_tag "popwear-pro-logo.png", alt: "Popwear PRO", class: "devise-page__logo-img" %>
+
+        <div class="devise-card">
+          <% if flash[:notice].present? %>
+            <div class="alert alert-success"><%= flash[:notice] %></div>
+          <% end %>
+          <% if flash[:alert].present? %>
+            <div class="alert alert-danger"><%= flash[:alert] %></div>
+          <% end %>
+
+          <%= yield %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

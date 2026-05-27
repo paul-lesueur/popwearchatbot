@@ -1,9 +1,6 @@
 class DeadlinesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_deadline, only: [:show, :estimate_duration]
-
-  def show
-  end
+  before_action :set_deadline, only: %i[show edit update destroy estimate_duration]
 
   def estimate_duration
     prompt = <<~PROMPT
@@ -40,12 +37,52 @@ class DeadlinesController < ApplicationController
       @deadline.update(estimated_duration: estimated_duration.to_i)
     end
 
-    redirect_to deadline_path(@deadline), notice: "Estimation IA générée."
+    redirect_to deadline_path(@deadline), notice: "Estimation IA générée.
+
+  def index
+    @deadlines = current_user.deadlines.order(:due_date)
+    @deadlines = @deadlines.where(category: params[:category]) if params[:category].present?
+  end
+
+  def show
+  end
+
+  def new
+    @deadline = current_user.deadlines.new(due_date: Date.today, status: "todo")
+  end
+
+  def create
+    @deadline = current_user.deadlines.new(deadline_params)
+    if @deadline.save
+      redirect_to deadlines_path, notice: "Échéance créée avec succès."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @deadline.update(deadline_params)
+      redirect_to deadlines_path, notice: "Échéance mise à jour."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @deadline.destroy
+    redirect_to deadlines_path, notice: "Échéance supprimée."
   end
 
   private
 
   def set_deadline
-    @deadline = Deadline.find(params[:id])
+    @deadline = current_user.deadlines.find(params[:id])
+  end
+
+  def deadline_params
+    params.require(:deadline).permit(:title, :description, :category, :due_date, :status)
   end
 end

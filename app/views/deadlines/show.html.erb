@@ -1,68 +1,66 @@
-<h1><%= @deadline.title %></h1>
-
-<p>
-  <strong>Description :</strong>
-  <%= @deadline.description %>
-</p>
-
-<p>
-  <strong>Catégorie :</strong>
-  <%= @deadline.category %>
-</p>
-
-<p>
-  <strong>Date limite :</strong>
-  <%= @deadline.due_date %>
-</p>
-
-<% if @deadline.estimated_duration.present? %>
-  <p>
-    <strong>Durée estimée sauvegardée :</strong>
-    <%= @deadline.estimated_duration %> minutes
-  </p>
-<% end %>
-
-<hr>
-
-<h2>Estimation IA de la durée</h2>
-
-<p>
-  L’IA va analyser la tâche, poser les questions de précision utiles,
-  puis proposer une première estimation de durée.
-</p>
-
-<%= form_with url: estimate_duration_deadline_path(@deadline),
-              method: :patch,
-              local: true,
-              data: { turbo: false } do %>
-  <%= submit_tag "Demander une estimation à l’IA", class: "btn btn-primary" %>
-<% end %>
-
-<% if @ai_response.present? %>
-  <hr>
-
-  <h3>Réponse de l’IA</h3>
-
-  <div>
-    <%= simple_format(@ai_response) %>
+<div class="container mt-4 deadline-show-page">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <%= link_to deadlines_path, class: "btn-back" do %>
+      ← Retour à la liste
+    <% end %>
+    <div class="deadline-actions">
+      <%= link_to "Modifier", edit_deadline_path(@deadline), class: "btn btn-sm btn-outline-dark me-2" %>
+      <%= button_to "Supprimer", deadline_path(@deadline),
+          method: :delete,
+          class: "btn btn-sm btn-outline-danger",
+          form: { data: { turbo_confirm: "Supprimer cette échéance ?" }, class: "d-inline" } %>
+    </div>
   </div>
-<% end %>
-<dl>
-  <dt>Catégorie</dt>
-  <dd><%= @deadline.category.humanize %></dd>
 
-  <dt>Date d'échéance</dt>
-  <dd><%= l(@deadline.due_date, format: :long) %></dd>
+  <div class="deadline-detail-card <%= urgency_class(@deadline) %>">
+    <div class="deadline-detail-header">
+      <div>
+        <h1><%= @deadline.title %></h1>
+        <div class="deadline-meta">
+          <span class="badge bg-secondary"><%= category_label(@deadline.category) || @deadline.category.humanize %></span>
+          <span class="badge bg-light"><%= status_label(@deadline.status) || @deadline.status&.humanize || "Todo" %></span>
+        </div>
+      </div>
+      <div class="deadline-urgency">
+        <span class="urgency-label"><%= urgency_label(@deadline) %></span>
+        <small class="deadline-date">📅 <%= l(@deadline.due_date, format: :long) %></small>
+      </div>
+    </div>
 
-  <dt>Statut</dt>
-  <dd><%= @deadline.status.humanize %></dd>
+    <% if @deadline.description.present? %>
+      <div class="deadline-section">
+        <h3>Description</h3>
+        <div class="deadline-description"><%= simple_format(@deadline.description) %></div>
+      </div>
+    <% end %>
 
-  <% if @deadline.description.present? %>
-    <dt>Description</dt>
-    <dd><%= simple_format(@deadline.description) %></dd>
-  <% end %>
-</dl>
+    <% if @deadline.estimated_duration.present? %>
+      <div class="deadline-section">
+        <h3>Durée estimée</h3>
+        <p class="deadline-duration"><%= @deadline.estimated_duration %> minutes</p>
+      </div>
+    <% end %>
+  </div>
 
-<%= link_to "Modifier", edit_deadline_path(@deadline) %>
-<%= button_to "Supprimer", deadline_path(@deadline), method: :delete, form: { data: { turbo_confirm: "Supprimer cette échéance ?" } } %>
-<%= link_to "Retour à la liste", deadlines_path %>
+  <div class="ai-estimation-card">
+    <h2>Estimation IA de la durée</h2>
+    <p class="ai-intro">
+      L'IA va analyser la tâche, poser les questions de précision utiles,
+      puis proposer une première estimation de durée.
+    </p>
+
+    <%= form_with url: estimate_duration_deadline_path(@deadline),
+                  method: :patch,
+                  local: true,
+                  data: { turbo: false } do %>
+      <%= submit_tag "Demander une estimation à l'IA", class: "btn btn-create" %>
+    <% end %>
+
+    <% if @ai_response.present? %>
+      <div class="ai-response">
+        <h3>Réponse de l'IA</h3>
+        <div class="ai-response-body"><%= simple_format(@ai_response) %></div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -187,3 +187,285 @@ h1 {
     font-size: 12px !important;
   }
 }
+
+// ============================================
+// Page formulaire (new / edit)
+// ============================================
+.deadline-form-page {
+  max-width: 760px;
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+  }
+
+  .btn-back {
+    color: $color-text-muted;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}
+
+.deadline-form-card {
+  background-color: $color-card;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  border: 1px solid $color-border;
+}
+
+.deadline-form {
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      color: $color-text-dark;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      background-color: $color-bg;
+      border: 1px solid $color-border;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: $color-text-dark;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+      width: 100%;
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+
+      &:focus {
+        outline: none;
+        background-color: $color-card;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+      }
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a1d1d' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-create {
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+
+  .form-errors {
+    background-color: rgba(231, 76, 60, 0.08);
+    border-left: 4px solid $urgency-red;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+
+    h2 {
+      color: $urgency-red;
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: $color-text-dark;
+      font-size: 14px;
+    }
+  }
+}
+
+// ============================================
+// Page détail (show)
+// ============================================
+.deadline-show-page {
+  max-width: 880px;
+
+  .btn-back {
+    color: $color-text-muted;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}
+
+.deadline-detail-card {
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-left: 6px solid $color-border;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  margin-bottom: 24px;
+
+  &.urgency-red {
+    border-left-color: $urgency-red;
+    .urgency-label { color: $urgency-red; }
+  }
+
+  &.urgency-orange {
+    border-left-color: $urgency-orange;
+    .urgency-label { color: $urgency-orange; }
+  }
+
+  &.urgency-green {
+    border-left-color: $urgency-green;
+    .urgency-label { color: $urgency-green; }
+  }
+
+  .deadline-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      color: $color-text-dark;
+    }
+  }
+
+  .deadline-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .deadline-urgency {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+
+    .urgency-label {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .deadline-date {
+      color: $color-text-muted;
+      font-size: 13px;
+    }
+  }
+
+  .deadline-section {
+    border-top: 1px solid $color-border;
+    padding-top: 20px;
+    margin-top: 20px;
+
+    h3 {
+      color: $color-text-dark;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 10px;
+    }
+
+    .deadline-description,
+    .deadline-duration {
+      color: $color-text-dark;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+.ai-estimation-card {
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+
+  h2 {
+    color: $color-text-dark;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .ai-intro {
+    color: $color-text-muted;
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+
+  .btn-create {
+    border: none;
+    cursor: pointer;
+  }
+
+  .ai-response {
+    margin-top: 24px;
+    border-top: 1px solid $color-border;
+    padding-top: 20px;
+
+    h3 {
+      color: $color-text-dark;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px;
+    }
+
+    .ai-response-body {
+      background-color: $color-bg;
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: $color-text-dark;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+}

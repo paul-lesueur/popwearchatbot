@@ -3,6 +3,7 @@ class DeadlinesController < ApplicationController
 
   def index
     @deadlines = current_user.deadlines.order(:due_date)
+    @deadlines = @deadlines.where(category: params[:category]) if params[:category].present?
   end
 
   def show

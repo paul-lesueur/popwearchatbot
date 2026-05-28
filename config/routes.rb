@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :deadlines, except: [:edit] do
+    collection do
+      post :prefill
+    end
+
     member do
       patch :estimate_duration
     end

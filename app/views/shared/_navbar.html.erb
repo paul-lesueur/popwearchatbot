@@ -10,6 +10,7 @@
     <!-- Liens -->
     <div class="navbar-links">
       <% if user_signed_in? %>
+        <span class="navbar-greeting">Bonjour <%= current_user.first_name.presence || "👋" %></span>
         <%= link_to "Mes échéances", deadlines_path, class: "navbar-link" %>
         <%= link_to "Mon profil", edit_user_registration_path, class: "navbar-link" %>
         <%= link_to "Déconnexion", destroy_user_session_path,

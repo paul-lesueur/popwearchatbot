@@ -45,14 +45,14 @@
       </div>
     </div>
 
-    <% if @deadline.estimated_duration.present? %>
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Durée estimée par l'IA</label>
-        <div class="form-control bg-light">
-          <%= @deadline.estimated_duration %> minutes
-        </div>
-      </div>
-    <% end %>
+    <div class="mb-3">
+      <%= f.label :estimated_duration, "Durée estimée en minutes", class: "form-label fw-semibold" %>
+      <%= f.number_field :estimated_duration,
+        class: "form-control",
+        min: 0,
+        step: 1,
+        placeholder: "Ex : 45" %>
+    </div>
 
     <div class="mb-4">
       <%= f.label :status, "Statut", class: "form-label fw-semibold" %>

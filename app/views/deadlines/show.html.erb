@@ -1,132 +1,203 @@
-<div class="container mt-4 deadline-show-page">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <%= link_to deadlines_path, class: "btn-back" do %>
-      ← Retour à la liste
-    <% end %>
-    <div class="deadline-actions">
-      <%= link_to "Modifier", edit_deadline_path(@deadline), class: "btn btn-sm btn-outline-dark me-2" %>
-      <%= button_to "Supprimer", deadline_path(@deadline),
-          method: :delete,
-          class: "btn btn-sm btn-outline-danger",
-          form: { data: { turbo_confirm: "Supprimer cette échéance ?" }, class: "d-inline" } %>
-    </div>
+<div class="container my-5 deadline-show">
+  <div class="mb-4">
+    <%= link_to "← Retour à la liste", deadlines_path, class: "btn btn-outline-dark" %>
   </div>
 
-  <div class="deadline-detail-card <%= urgency_class(@deadline) %>">
-    <div class="deadline-detail-header">
+  <div class="deadline-show-card">
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
       <div>
-        <h1><%= @deadline.title %></h1>
-        <div class="deadline-meta">
-          <span class="badge bg-secondary"><%= category_label(@deadline.category) || @deadline.category.humanize %></span>
-          <span class="badge bg-light"><%= status_label(@deadline.status) || @deadline.status&.humanize || "Todo" %></span>
+        <h1 class="mb-2"><%= @deadline.title %></h1>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <% if @deadline.category.present? %>
+            <span class="badge bg-secondary"><%= @deadline.category.humanize %></span>
+          <% end %>
+
+          <% if @deadline.status.present? %>
+            <span class="badge bg-light text-dark"><%= @deadline.status.humanize %></span>
+          <% end %>
         </div>
       </div>
-      <div class="deadline-urgency">
-        <span class="urgency-label"><%= urgency_label(@deadline) %></span>
-        <small class="deadline-date">📅 <%= l(@deadline.due_date, format: :long) %></small>
+
+      <div class="deadline-actions">
+        <%= link_to "Modifier",
+                    "#edit-deadline-form",
+                    class: "btn btn-outline-dark btn-sm" %>
+
+        <%= button_to "Supprimer",
+                      deadline_path(@deadline),
+                      method: :delete,
+                      class: "btn btn-outline-dark btn-sm",
+                      form: { data: { turbo_confirm: "Supprimer cette échéance ?" } } %>
       </div>
+    </div>
+
+    <div class="deadline-info-grid">
+      <div>
+        <span class="info-label">Catégorie</span>
+        <p><%= @deadline.category.present? ? @deadline.category.humanize : "Non renseignée" %></p>
+      </div>
+
+      <div>
+        <span class="info-label">Date limite</span>
+        <p><%= @deadline.due_date.present? ? l(@deadline.due_date, format: :long) : "Non renseignée" %></p>
+      </div>
+
+      <div>
+        <span class="info-label">Statut</span>
+        <p><%= @deadline.status.present? ? @deadline.status.humanize : "Non renseigné" %></p>
+      </div>
+
+      <% if @deadline.estimated_duration.present? %>
+        <div>
+          <span class="info-label">Durée estimée</span>
+
+          <% hours = @deadline.estimated_duration.to_i / 60 %>
+          <% minutes = @deadline.estimated_duration.to_i % 60 %>
+
+          <p>
+            <% if hours.positive? %>
+              <%= hours %>h<%= minutes.to_s.rjust(2, "0") %>
+            <% else %>
+              <%= minutes %> minutes
+            <% end %>
+          </p>
+        </div>
+      <% end %>
     </div>
 
     <% if @deadline.description.present? %>
-      <div class="deadline-section">
-        <h3>Description</h3>
-        <div class="deadline-description"><%= simple_format(@deadline.description) %></div>
+      <div class="deadline-info-block">
+        <h2>Description</h2>
+        <p><%= @deadline.description %></p>
       </div>
     <% end %>
-<h1><%= @deadline.title %></h1>
 
-<p>
-  <strong>Description :</strong>
-  <%= @deadline.description %>
-</p>
-
-<p>
-  <strong>Catégorie :</strong>
-  <%= @deadline.category&.humanize || "Non classé" %>
-</p>
-
-<p>
-  <strong>Date limite :</strong>
-  <%= @deadline.due_date %>
-</p>
-
-<% if @deadline.estimated_duration.present? %>
-  <p>
-    <strong>Durée estimée sauvegardée :</strong>
-    <%= @deadline.estimated_duration %> minutes
-  </p>
-<% end %>
-
-<hr>
-
-<h2>Estimation IA de la durée</h2>
-
-<p>
-  L'IA va analyser la tâche, poser les questions de précision utiles,
-  puis proposer une première estimation de durée.
-</p>
-
-<%= form_with url: estimate_duration_deadline_path(@deadline),
-              method: :patch,
-              local: true,
-              data: { turbo: false } do %>
-  <%= submit_tag "Demander une estimation à l'IA", class: "btn btn-primary" %>
-<% end %>
-
-<% if @ai_response.present? %>
-  <hr>
-
-  <h3>Réponse de l'IA</h3>
-
-  <div>
-    <%= simple_format(@ai_response) %>
-  </div>
-<% end %>
-
-<hr>
-
-<%= button_to "Générer un message client",
-  deadline_chats_path(@deadline),
-  method: :post,
-  class: "btn btn-primary" %>
-
-<dl>
-  <dt>Catégorie</dt>
-  <dd><%= @deadline.category&.humanize || "Non classé" %></dd>
-
-  <dt>Date d'échéance</dt>
-  <dd><%= l(@deadline.due_date, format: :long) if @deadline.due_date.present? %></dd>
-
-  <dt>Statut</dt>
-  <dd><%= @deadline.status&.humanize || "Todo" %></dd>
-
-    <% if @deadline.estimated_duration.present? %>
-      <div class="deadline-section">
-        <h3>Durée estimée</h3>
-        <p class="deadline-duration"><%= @deadline.estimated_duration %> minutes</p>
+    <div class="ai-panel" id="edit-deadline-form">
+      <div>
+        <h2>Modifier cette deadline</h2>
+        <p>
+          Mets à jour les informations de ta deadline directement depuis cette page.
+        </p>
       </div>
-    <% end %>
-  </div>
 
-  <div class="ai-estimation-card">
-    <h2>Estimation IA de la durée</h2>
-    <p class="ai-intro">
-      L'IA va analyser la tâche, poser les questions de précision utiles,
-      puis proposer une première estimation de durée.
-    </p>
+      <%= form_with model: @deadline, local: true, html: { class: "deadline-form" } do |f| %>
+        <% if @deadline.errors.any? %>
+          <div class="alert alert-danger">
+            <p class="mb-2">Impossible d'enregistrer cette deadline :</p>
 
-    <%= form_with url: estimate_duration_deadline_path(@deadline),
-                  method: :patch,
-                  local: true,
-                  data: { turbo: false } do %>
-      <%= submit_tag "Demander une estimation à l'IA", class: "btn btn-create" %>
-    <% end %>
+            <ul class="mb-0">
+              <% @deadline.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-    <% if @ai_response.present? %>
-      <div class="ai-response">
-        <h3>Réponse de l'IA</h3>
-        <div class="ai-response-body"><%= simple_format(@ai_response) %></div>
+        <div class="mb-3">
+          <%= f.label :title, "Titre", class: "form-label" %>
+          <%= f.text_field :title, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :description, "Description", class: "form-label" %>
+          <%= f.text_area :description, rows: 5, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :category, "Catégorie", class: "form-label" %>
+          <%= f.select :category,
+                       [
+                         ["Client", "client"],
+                         ["Atelier", "atelier"],
+                         ["Administratif", "administratif"],
+                         ["Comptable", "comptable"]
+                       ],
+                       {},
+                       class: "form-select" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :due_date, "Date limite", class: "form-label" %>
+          <%= f.date_field :due_date, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :status, "Statut", class: "form-label" %>
+          <%= f.select :status,
+                       [
+                         ["À faire", "todo"],
+                         ["En cours", "in_progress"],
+                         ["Terminée", "done"]
+                       ],
+                       {},
+                       class: "form-select" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :estimated_duration, "Durée estimée en minutes", class: "form-label" %>
+          <%= f.number_field :estimated_duration,
+                             class: "form-control",
+                             min: 0,
+                             placeholder: "Exemple : 90 pour 1h30" %>
+        </div>
+
+        <%= f.submit "Enregistrer les modifications", class: "btn btn-dark" %>
+      <% end %>
+    </div>
+
+    <div class="ai-panel">
+      <div>
+        <h2>Estimation IA de la durée</h2>
+        <p>
+          L'IA analyse la tâche, pose les questions de précision utiles,
+          puis propose une première estimation de durée.
+        </p>
       </div>
-    <% end %>
+
+      <%= form_with url: estimate_duration_deadline_path(@deadline),
+                    method: :patch,
+                    local: true,
+                    data: { turbo: false } do %>
+        <%= submit_tag "Demander une estimation à l'IA", class: "btn btn-dark" %>
+      <% end %>
+    </div>
+
+    <div class="ai-panel">
+      <div>
+        <h2>Message client assisté par IA</h2>
+        <p>
+          L'IA génère un message professionnel prêt à envoyer au client.
+        </p>
+      </div>
+
+      <%= button_to(
+        @client_message.present? ? "Regenerate" : "Générer un message client",
+        deadline_chats_path(@deadline),
+        method: :post,
+        class: "btn btn-dark"
+      ) %>
+
+      <% if @client_message.present? %>
+        <div class="generated-message-card mt-4" data-controller="clipboard">
+          <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+            <h3>Message généré</h3>
+
+            <button type="button"
+                    class="btn btn-outline-dark btn-sm"
+                    data-clipboard-target="button"
+                    data-action="click->clipboard#copy">
+              Copier
+            </button>
+          </div>
+
+          <div id="client-message-content"
+               class="generated-message-content"
+               data-clipboard-target="source">
+            <%= simple_format(@client_message.content) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

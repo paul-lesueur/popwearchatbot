@@ -469,3 +469,117 @@ h1 {
     }
   }
 }
+
+// ============================================
+// Page show d'une échéance
+// ============================================
+.deadline-show {
+  h1 {
+    color: $color-text-dark;
+    font-weight: 800;
+  }
+
+  h2 {
+    color: $color-text-dark;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    color: $color-text-dark;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.deadline-show-card {
+  background-color: $color-card;
+  border-left: 6px solid $color-primary;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.deadline-info-block {
+  background-color: $color-bg;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  p {
+    margin-bottom: 0;
+    color: $color-text-dark;
+    line-height: 1.6;
+  }
+}
+
+.deadline-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+
+  > div {
+    background-color: $color-bg;
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: $color-text-dark;
+    font-weight: 600;
+  }
+
+  .info-label {
+    color: $color-text-muted;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+.ai-panel {
+  background-color: #fff7f3;
+  border: 1px solid rgba(255, 107, 53, 0.18);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+
+  p {
+    color: #6f5b5b;
+    margin-bottom: 16px;
+  }
+}
+
+.generated-message-card {
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.generated-message-content {
+  color: $color-text-dark;
+  line-height: 1.7;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .deadline-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deadline-show-card {
+    padding: 24px;
+  }
+
+  .deadline-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}

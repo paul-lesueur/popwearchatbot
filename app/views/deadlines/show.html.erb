@@ -9,20 +9,20 @@
         <h1 class="mb-2"><%= @deadline.title %></h1>
 
         <div class="d-flex gap-2 flex-wrap">
-          <% if @deadline.category.present? %>
-            <span class="badge bg-secondary"><%= @deadline.category.humanize %></span>
-          <% end %>
-
-          <% if @deadline.status.present? %>
-            <span class="badge bg-light text-dark"><%= @deadline.status.humanize %></span>
-          <% end %>
+          <span class="badge bg-secondary"><%= @deadline.category.humanize %></span>
+          <span class="badge bg-light"><%= @deadline.status.humanize %></span>
         </div>
       </div>
 
       <div class="deadline-actions">
-        <%= link_to "Modifier",
-                    "#edit-deadline-form",
-                    class: "btn btn-outline-dark btn-sm" %>
+        <button class="btn btn-outline-dark btn-sm"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#edit-deadline-form"
+                aria-expanded="false"
+                aria-controls="edit-deadline-form">
+          Modifier
+        </button>
 
         <%= button_to "Supprimer",
                       deadline_path(@deadline),
@@ -32,40 +32,6 @@
       </div>
     </div>
 
-    <div class="deadline-info-grid">
-      <div>
-        <span class="info-label">Catégorie</span>
-        <p><%= @deadline.category.present? ? @deadline.category.humanize : "Non renseignée" %></p>
-      </div>
-
-      <div>
-        <span class="info-label">Date limite</span>
-        <p><%= @deadline.due_date.present? ? l(@deadline.due_date, format: :long) : "Non renseignée" %></p>
-      </div>
-
-      <div>
-        <span class="info-label">Statut</span>
-        <p><%= @deadline.status.present? ? @deadline.status.humanize : "Non renseigné" %></p>
-      </div>
-
-      <% if @deadline.estimated_duration.present? %>
-        <div>
-          <span class="info-label">Durée estimée</span>
-
-          <% hours = @deadline.estimated_duration.to_i / 60 %>
-          <% minutes = @deadline.estimated_duration.to_i % 60 %>
-
-          <p>
-            <% if hours.positive? %>
-              <%= hours %>h<%= minutes.to_s.rjust(2, "0") %>
-            <% else %>
-              <%= minutes %> minutes
-            <% end %>
-          </p>
-        </div>
-      <% end %>
-    </div>
-
     <% if @deadline.description.present? %>
       <div class="deadline-info-block">
         <h2>Description</h2>
@@ -73,77 +39,69 @@
       </div>
     <% end %>
 
-    <div class="ai-panel" id="edit-deadline-form">
+    <div class="deadline-info-grid">
       <div>
-        <h2>Modifier cette deadline</h2>
-        <p>
-          Mets à jour les informations de ta deadline directement depuis cette page.
-        </p>
+        <span class="info-label">Catégorie</span>
+        <p><%= @deadline.category.humanize %></p>
       </div>
 
-      <%= form_with model: @deadline, local: true, html: { class: "deadline-form" } do |f| %>
-        <% if @deadline.errors.any? %>
-          <div class="alert alert-danger">
-            <p class="mb-2">Impossible d'enregistrer cette deadline :</p>
+      <div>
+        <span class="info-label">Date limite</span>
+        <p><%= l(@deadline.due_date, format: :long) %></p>
+      </div>
 
-            <ul class="mb-0">
-              <% @deadline.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-              <% end %>
-            </ul>
-          </div>
-        <% end %>
+      <div>
+        <span class="info-label">Statut</span>
+        <p><%= @deadline.status.humanize %></p>
+      </div>
 
-        <div class="mb-3">
-          <%= f.label :title, "Titre", class: "form-label" %>
-          <%= f.text_field :title, class: "form-control" %>
+      <% if @deadline.estimated_duration.present? %>
+        <div>
+          <span class="info-label">Durée estimée</span>
+          <p><%= @deadline.estimated_duration %> minutes</p>
         </div>
-
-        <div class="mb-3">
-          <%= f.label :description, "Description", class: "form-label" %>
-          <%= f.text_area :description, rows: 5, class: "form-control" %>
-        </div>
-
-        <div class="mb-3">
-          <%= f.label :category, "Catégorie", class: "form-label" %>
-          <%= f.select :category,
-                       [
-                         ["Client", "client"],
-                         ["Atelier", "atelier"],
-                         ["Administratif", "administratif"],
-                         ["Comptable", "comptable"]
-                       ],
-                       {},
-                       class: "form-select" %>
-        </div>
-
-        <div class="mb-3">
-          <%= f.label :due_date, "Date limite", class: "form-label" %>
-          <%= f.date_field :due_date, class: "form-control" %>
-        </div>
-
-        <div class="mb-3">
-          <%= f.label :status, "Statut", class: "form-label" %>
-          <%= f.select :status,
-                       [
-                         ["À faire", "todo"],
-                         ["En cours", "in_progress"],
-                         ["Terminée", "done"]
-                       ],
-                       {},
-                       class: "form-select" %>
-        </div>
-
-        <div class="mb-4">
-          <%= f.label :estimated_duration, "Durée estimée en minutes", class: "form-label" %>
-          <%= f.number_field :estimated_duration,
-                             class: "form-control",
-                             min: 0,
-                             placeholder: "Exemple : 90 pour 1h30" %>
-        </div>
-
-        <%= f.submit "Enregistrer les modifications", class: "btn btn-dark" %>
       <% end %>
+    </div>
+
+    <div class="collapse" id="edit-deadline-form">
+      <div class="edit-deadline-panel">
+        <h2>Modifier l'échéance</h2>
+
+        <%= form_with model: @deadline, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :title, "Titre", class: "form-label" %>
+            <%= f.text_field :title, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :description, "Description", class: "form-label" %>
+            <%= f.text_area :description, rows: 4, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :category, "Catégorie", class: "form-label" %>
+            <%= f.select :category,
+                         [["Client", "client"], ["Atelier", "atelier"], ["Administratif", "administratif"], ["Comptable", "comptable"]],
+                         {},
+                         class: "form-select" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :due_date, "Date limite", class: "form-label" %>
+            <%= f.date_field :due_date, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :status, "Statut", class: "form-label" %>
+            <%= f.select :status,
+                         [["À faire", "todo"], ["En cours", "in_progress"], ["Terminé", "done"]],
+                         {},
+                         class: "form-select" %>
+          </div>
+
+          <%= f.submit "Enregistrer les modifications", class: "btn btn-dark" %>
+        <% end %>
+      </div>
     </div>
 
     <div class="ai-panel">

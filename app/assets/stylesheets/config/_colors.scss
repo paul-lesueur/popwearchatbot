@@ -1,10 +1,20 @@
-// Define variables for your color scheme
+// ============================================
+// Design system POPWEAR — source de vérité unique
+// ============================================
 
-// For example:
-$red: #FD1015;
-$blue: #0D6EFD;
-$yellow: #FFC65A;
-$orange: #E67E22;
-$green: #1EDD88;
-$gray: #0E0000;
-$light-gray: #F4F4F4;
+// Palette
+$primary:         #EE7635; // Orange POPWEAR
+$secondary:       #411221; // Bordeaux foncé
+$gradient-accent: #FF6342; // Accent dégradé
+$yellow:          #F4BA4A;
+$beige:           #F5E5D6;
+$success:         #00BA88;
+$error:           #E32F3B;
+$warning:         #FFA115;
+$white:           #FFFFFF;
+
+// Neutres transverses
+$bg-light:     #F4F4F7; // Fond de page
+$text-dark:    $secondary; // Titres + texte courant
+$text-muted:   #B0B0B8;
+$border-color: #E8E8EE;

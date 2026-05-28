@@ -1,6 +1,6 @@
 class DeadlinesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_deadline, only: %i[show update destroy estimate_duration]
+  before_action :set_deadline, only: %i[show edit update destroy estimate_duration]
 
   def estimate_duration
     prompt = <<~PROMPT
@@ -46,7 +46,11 @@ class DeadlinesController < ApplicationController
   end
 
   def show
-    set_client_message
+    @client_message = Message.joins(:chat)
+                             .where(chats: { deadline_id: @deadline.id, user_id: current_user.id })
+                             .where(role: "assistant")
+                             .order(created_at: :desc)
+                             .first
   end
 
   def new
@@ -57,17 +61,25 @@ class DeadlinesController < ApplicationController
     @deadline = current_user.deadlines.new(deadline_params)
 
     if @deadline.save
-      redirect_to deadline_path(@deadline), notice: "Échéance créée avec succès."
+      redirect_to deadlines_path, notice: "Échéance créée avec succès."
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def edit
   end
 
   def update
     if @deadline.update(deadline_params)
       redirect_to deadline_path(@deadline), notice: "Échéance mise à jour."
     else
-      set_client_message
+      @client_message = Message.joins(:chat)
+                               .where(chats: { deadline_id: @deadline.id, user_id: current_user.id })
+                               .where(role: "assistant")
+                               .order(created_at: :desc)
+                               .first
+
       render :show, status: :unprocessable_entity
     end
   end
@@ -83,22 +95,7 @@ class DeadlinesController < ApplicationController
     @deadline = current_user.deadlines.find(params[:id])
   end
 
-  def set_client_message
-    @client_message = Message.joins(:chat)
-                             .where(chats: { deadline_id: @deadline.id, user_id: current_user.id })
-                             .where(role: "assistant")
-                             .order(created_at: :desc)
-                             .first
-  end
-
   def deadline_params
-    params.require(:deadline).permit(
-      :title,
-      :description,
-      :category,
-      :due_date,
-      :status,
-      :estimated_duration
-    )
+    params.require(:deadline).permit(:title, :description, :category, :due_date, :status)
   end
 end

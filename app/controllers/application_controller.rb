@@ -6,6 +6,17 @@ class ApplicationController < ActionController::Base
   private
 
   def layout_by_resource
-    devise_controller? ? "devise" : "application"
+    if devise_controller? && devise_auth_pages?
+      "devise"
+    else
+      "application"
+    end
+  end
+
+  def devise_auth_pages?
+    # Le bloc orange seulement pour connexion / inscription / mot de passe
+    controller_name == "sessions" ||
+      (controller_name == "registrations" && action_name == "new") ||
+      controller_name == "passwords"
   end
 end

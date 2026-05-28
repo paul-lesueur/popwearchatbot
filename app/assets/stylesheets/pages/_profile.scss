@@ -1,0 +1,94 @@
+$color-primary: #ff6b35;
+$color-text-dark: #4a1d1d;
+$color-text-muted: #b0b0b8;
+$color-bg: #f4f4f7;
+$color-border: #e8e8ee;
+
+.profile-page {
+  min-height: calc(100vh - 64px);
+  background-color: $color-bg;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+}
+
+.profile-card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.profile-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: $color-text-dark;
+  margin-bottom: 4px;
+}
+
+.profile-subtitle {
+  color: $color-text-muted;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.profile-divider {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: 24px 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: $color-text-dark;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid $color-border;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.form-hint {
+  display: block;
+  color: $color-text-muted;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.btn-profile-save {
+  width: 100%;
+  background-color: $color-primary;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  }
+}

@@ -35,7 +35,6 @@
         <div class="deadline-meta mb-2">
           <span class="badge bg-secondary"><%= @deadline.category.humanize %></span>
           <span class="badge bg-light"><%= status_label(@deadline.status) %></span>
-          <span class="urgency-badge <%= urgency_class %>"><%= urgency_label %></span>
         </div>
 
         <h1><%= @deadline.title %></h1>

@@ -57,7 +57,7 @@
     <div class="mb-4">
       <%= f.label :status, "Statut", class: "form-label fw-semibold" %>
       <%= f.select :status,
-        Deadline.statuses.keys.map { |k| [k.humanize, k] },
+        Deadline.statuses.keys.map { |k| [status_label(k), k] },
         {},
         class: "form-select" %>
     </div>

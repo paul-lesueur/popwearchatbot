@@ -13,7 +13,7 @@
         </span>
 
         <span class="badge bg-light text-dark">
-          <%= @deadline.status&.humanize || "Todo" %>
+          <%= status_label(@deadline.status || "todo") %>
         </span>
       </div>
 

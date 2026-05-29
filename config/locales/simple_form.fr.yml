@@ -1,0 +1,12 @@
+fr:
+  simple_form:
+    "yes": 'Oui'
+    "no": 'Non'
+    required:
+      text: 'obligatoire'
+      mark: '*'
+      # Vous pouvez décommenter la ligne ci-dessous pour surcharger tout le HTML du champ requis.
+      # Si vous utilisez html, text et mark ne sont pas utilisés.
+      # html: '<abbr title="obligatoire">*</abbr>'
+    error_notification:
+      default_message: "Veuillez corriger les erreurs ci-dessous :"

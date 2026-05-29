@@ -1,14 +1,14 @@
 <% unless current_page?(root_path) %>
   <nav class="navbar-popwear">
-    <div class="navbar-container">
-      <%= link_to root_path, class: "navbar-brand" do %>
-        <span>Popwear</span>
+    <div class="navbar-container container">
+      <%= link_to root_path, class: "navbar-logo" do %>
+        <%= image_tag "popwear-pro-logo.png", alt: "Popwear", height: 48 %>
       <% end %>
 
       <div class="navbar-links">
         <% if user_signed_in? %>
           <span class="navbar-greeting">
-            Bonjour <%= current_user.email.split("@").first %> 👋
+            Bonjour <%= current_user.first_name.presence || current_user.email.split("@").first %> 👋
           </span>
 
           <%= link_to "Mes échéances", deadlines_path, class: "navbar-link" %>

@@ -6,8 +6,8 @@ $color-bg: #f4f4f7;
 .navbar-popwear {
   background-color: $color-bg;
   border-bottom: 1px solid rgba(74, 29, 29, 0.08);
-  padding: 0 24px;
-  height: 64px;
+  padding: 0;
+  height: 72px;
   display: flex;
   align-items: center;
   position: sticky;
@@ -16,9 +16,6 @@ $color-bg: #f4f4f7;
 }
 
 .navbar-container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,6 +43,12 @@ $color-bg: #f4f4f7;
   border-radius: 50%;
   background-color: $color-primary;
   display: inline-block;
+}
+
+.navbar-greeting {
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-text-dark;
 }
 
 // Liens

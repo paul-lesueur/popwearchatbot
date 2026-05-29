@@ -1,20 +1,28 @@
 @import "config/colors";
 
-// ============================================
-// Aliases locaux pointant sur les tokens du design system
-// ============================================
-$color-bg: $bg-light;          // Fond gris très clair
-$color-card: $white;           // Cards blanches
-$color-primary: $primary;      // Orange POPWEAR
-$color-text-dark: $text-dark;  // Bordeaux foncé pour titres
-$color-text-muted: $text-muted;// Gris pour métadonnées
-$color-border: $border-color;  // Bordures discrètes
+$color-bg: $bg-light;
+$color-card: $white;
+$color-primary: $primary;
+$color-text-dark: $text-dark;
+$color-text-muted: $text-muted;
+$color-border: $border-color;
 
-// Couleurs d'urgence (alignées sur les tokens)
 $urgency-red: $error;
 $urgency-orange: $primary;
 $urgency-green: $success;
 $urgency-yellow: $yellow;
+
+@mixin urgency-colors($color) {
+  border-left-color: $color;
+  .urgency-label { color: $color; font-weight: 700; }
+}
+
+@mixin card-panel {
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
 
 // ============================================
 // Page
@@ -53,6 +61,7 @@ h1 {
   border-radius: 24px !important;
   padding: 8px 20px !important;
   font-weight: 600 !important;
+  min-height: 40px;
 
   &:hover {
     background-color: $color-primary !important;
@@ -74,7 +83,7 @@ h1 {
 }
 
 // ============================================
-// Cards d'échéances
+// Cards d'échéances (index)
 // ============================================
 .deadline-card {
   background-color: $color-card;
@@ -83,57 +92,54 @@ h1 {
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  min-height: 215px;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
+  .card-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   .card-title {
     color: $color-text-dark;
     font-weight: 700;
+    min-height: 42px;
+    margin-bottom: 10px;
+    line-height: 1.25;
   }
 
   .card-text {
     color: $color-text-muted;
     font-size: 14px;
+    min-height: 44px;
+    margin-bottom: 14px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  // Code couleur par urgence
-  &.urgency-red {
-    border-left-color: $urgency-red;
-
-    .urgency-label {
-      color: $urgency-red;
-      font-weight: 700;
-    }
-  }
-
-  &.urgency-orange {
-    border-left-color: $urgency-orange;
-
-    .urgency-label {
-      color: $urgency-orange;
-      font-weight: 700;
-    }
-  }
-
-  &.urgency-green {
-    border-left-color: $urgency-green;
-
-    .urgency-label {
-      color: $urgency-green;
-      font-weight: 700;
-    }
-  }
+  &.urgency-red    { @include urgency-colors($urgency-red); }
+  &.urgency-orange { @include urgency-colors($urgency-orange); }
+  &.urgency-green  { @include urgency-colors($urgency-green); }
 }
 
 // ============================================
-// Badges (catégorie / statut)
+// Badges
 // ============================================
 .badge.bg-secondary {
-  background-color: rgba($secondary, 0.1) !important;  // Bordeaux très léger
-  color: $color-text-dark !important;                   // Bordeaux foncé (= couleur des titres)
+  background-color: rgba($secondary, 0.1) !important;
+  color: $color-text-dark !important;
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 12px;
@@ -160,6 +166,8 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  border: none;
+  cursor: pointer;
   box-shadow: 0 4px 12px rgba($color-primary, 0.3);
   transition: transform 0.2s;
 
@@ -176,7 +184,7 @@ h1 {
 }
 
 // ============================================
-// Lien titre dans la card
+// Lien titre
 // ============================================
 .deadline-link {
   color: inherit;
@@ -184,7 +192,6 @@ h1 {
 
   &:hover {
     color: $color-primary;
-    text-decoration: none;
   }
 }
 
@@ -192,691 +199,53 @@ h1 {
 // Actions dans la card
 // ============================================
 .deadline-actions {
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 10px;
 
-  // Hauteur identique garantie pour Modifier (a) et Supprimer (button) :
-  // mêmes padding, police, interligne et bordure sur les deux.
+  .btn,
   .btn-sm {
-    border-radius: 16px !important;
+    min-height: 34px;
     padding: 6px 14px !important;
+    border-radius: 999px !important;
     font-size: 12px !important;
-    line-height: 1.5 !important;
-    border-width: 1px !important;
-  }
-}
-
-// ============================================
-// Page formulaire (new / edit)
-// ============================================
-.deadline-page {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 28px 24px 56px;
-}
-
-.deadline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-
-  h1 {
-    margin: 0;
-    color: $color-text-dark;
-    font-size: 28px;
-    font-weight: 700;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .btn-back {
-    color: $color-text-muted;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: color 0.2s;
+  .btn-outline-primary,
+  .btn-outline-secondary {
+    border-color: $color-primary !important;
+    color: $color-primary !important;
+    background-color: transparent !important;
 
     &:hover {
-      color: $color-primary;
-    }
-  }
-}
-
-.popwear-card {
-  width: 100%;
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 28px 32px;
-  margin-bottom: 24px;
-
-  h2 {
-    color: $color-text-dark;
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 8px;
-  }
-
-  p {
-    color: $color-text-muted;
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 0 18px;
-  }
-
-  .form-group {
-    margin-bottom: 18px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  label,
-  .form-label {
-    color: $color-text-dark;
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  .form-control,
-  .form-select {
-    background-color: $color-bg;
-    border: 1px solid $color-border;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 14px;
-    color: $color-text-dark;
-    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
-    width: 100%;
-
-    &::placeholder {
-      color: $color-text-muted;
-    }
-
-    &:focus {
-      outline: none;
-      background-color: $color-card;
-      border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+      background-color: $color-primary !important;
+      border-color: $color-primary !important;
+      color: white !important;
     }
   }
 
-  textarea.form-control {
-    resize: vertical;
-    min-height: 90px;
-  }
-}
-
-.ai-prefill-card {
-  padding-bottom: 26px;
-}
-
-.deadline-form-card {
-  padding-top: 30px;
-}
-
-.deadline-form {
-  .form-row {
-    display: grid;
-    gap: 16px;
-  }
-
-  .form-row-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .form-actions {
-    margin-top: 22px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .form-errors {
-    background-color: rgba($urgency-red, 0.08);
-    border-left: 4px solid $urgency-red;
-    border-radius: 10px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-
-    h2 {
-      color: $urgency-red;
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0 0 8px;
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 20px;
-      color: $color-text-dark;
-      font-size: 14px;
-    }
-  }
-}
-
-.ai-estimation-card {
-  margin-top: 24px;
-}
-
-@media (max-width: 768px) {
-  .deadline-page {
-    padding: 22px 16px 44px;
-  }
-
-  .deadline-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-
-    h1 {
-      font-size: 24px;
-    }
-  }
-
-  .popwear-card {
-    padding: 24px 20px;
-  }
-
-  .deadline-form {
-    .form-row-2 {
-      grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-
-  .deadline-page {
-    .btn-dark,
-    .btn-outline-dark {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-}
-
-// ============================================
-// Page détail (show)
-// ============================================
-.deadline-show-page {
-  max-width: 880px;
-
-  .btn-back {
-    color: $color-text-muted;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: color 0.2s;
+  .btn-outline-danger {
+    border-color: $urgency-red !important;
+    color: $urgency-red !important;
+    background-color: transparent !important;
 
     &:hover {
-      color: $color-primary;
-    }
-  }
-}
-
-.deadline-detail-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-left: 6px solid $color-border;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 32px;
-  margin-bottom: 24px;
-
-  &.urgency-red {
-    border-left-color: $urgency-red;
-    .urgency-label { color: $urgency-red; }
-  }
-
-  &.urgency-orange {
-    border-left-color: $urgency-orange;
-    .urgency-label { color: $urgency-orange; }
-  }
-
-  &.urgency-green {
-    border-left-color: $urgency-green;
-    .urgency-label { color: $urgency-green; }
-  }
-
-  .deadline-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: 28px;
-      color: $color-text-dark;
-    }
-  }
-
-  .deadline-meta {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .deadline-urgency {
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-
-    .urgency-label {
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .deadline-date {
-      color: $color-text-muted;
-      font-size: 13px;
-    }
-  }
-
-  .deadline-section {
-    border-top: 1px solid $color-border;
-    padding-top: 20px;
-    margin-top: 20px;
-
-    h3 {
-      color: $color-text-dark;
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 0 0 10px;
-    }
-
-    .deadline-description,
-    .deadline-duration {
-      color: $color-text-dark;
-      font-size: 15px;
-      line-height: 1.6;
-      margin: 0;
-    }
-  }
-}
-
-.ai-estimation-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 32px;
-
-  h2 {
-    color: $color-text-dark;
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 8px;
-  }
-
-  .ai-intro {
-    color: $color-text-muted;
-    font-size: 14px;
-    margin: 0 0 20px;
-  }
-
-  .btn-create {
-    border: none;
-    cursor: pointer;
-  }
-
-  .ai-response {
-    margin-top: 24px;
-    border-top: 1px solid $color-border;
-    padding-top: 20px;
-
-    h3 {
-      color: $color-text-dark;
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 0 0 12px;
-    }
-
-    .ai-response-body {
-      background-color: $color-bg;
-      border-radius: 10px;
-      padding: 16px 20px;
-      color: $color-text-dark;
-      font-size: 14px;
-      line-height: 1.6;
+      background-color: $urgency-red !important;
+      border-color: $urgency-red !important;
+      color: white !important;
     }
   }
 }
 
 // ============================================
-// Page show d'une échéance
+// AI badge & helper
 // ============================================
-.deadline-show {
-  h1 {
-    color: $color-text-dark;
-    font-weight: 800;
-  }
-
-  h2 {
-    color: $color-text-dark;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  h3 {
-    color: $color-text-dark;
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-  }
-}
-
-.deadline-show-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-left: 6px solid $color-border;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-
-  // Tags catégorie/statut rééquilibrés + arrondi identique au design system
-  .badge {
-    font-size: 0.875rem;
-    padding: 8px 16px;
-    border-radius: 12px;
-  }
-
-  .urgency-badge {
-    font-weight: 700;
-  }
-
-  // Accent gauche + badge colorés selon l'urgence (identique aux cartes de l'index)
-  &.urgency-red {
-    border-left-color: $urgency-red;
-    .urgency-badge { background-color: rgba($urgency-red, 0.12); color: $urgency-red; }
-  }
-
-  &.urgency-orange {
-    border-left-color: $urgency-orange;
-    .urgency-badge { background-color: rgba($urgency-orange, 0.12); color: $urgency-orange; }
-  }
-
-  &.urgency-green {
-    border-left-color: $urgency-green;
-    .urgency-badge { background-color: rgba($urgency-green, 0.12); color: $urgency-green; }
-  }
-
-  // Boutons Modifier/Supprimer agrandis et espacés (uniquement sur la page show)
-  .deadline-actions {
-    gap: 12px;
-
-    .btn-sm {
-      padding: 8px 18px !important;
-      font-size: 14px !important;
-    }
-  }
-}
-
-// Encadré unique regroupant toutes les infos en lecture seule (style cartes page New)
-.deadline-info-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  margin-bottom: 32px;
-
-  .info-section-title {
-    color: $color-text-muted;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 16px;
-  }
-}
-
-.deadline-info-description {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid $color-border;
-
-  p {
-    margin: 4px 0 0;
-    color: $color-text-dark;
-    line-height: 1.6;
-  }
-}
-
-.deadline-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 24px;
-
-  > div {
-    background-color: transparent;
-    padding: 0;
-  }
-
-  p {
-    margin: 4px 0 0;
-    color: $color-text-dark;
-    font-weight: 600;
-  }
-
-  .info-label {
-    color: $color-text-muted;
-    font-size: 13px;
-    font-weight: 600;
-  }
-}
-
-.ai-panel {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  margin-top: 24px;
-
-  p {
-    color: $color-text-muted;
-    margin-bottom: 16px;
-  }
-}
-
-.generated-message-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 14px;
-  padding: 20px;
-}
-
-.generated-message-content {
-  color: $color-text-dark;
-  line-height: 1.7;
-
-  p:last-child {
-    margin-bottom: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .deadline-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .deadline-show-card {
-    padding: 24px;
-  }
-
-  .deadline-actions {
-    flex-direction: column;
-    align-items: flex-end;
-  }
-}
-
-// ============================================
-// Compact mode formulaire deadline
-// ============================================
-.deadline-page {
-  max-width: 820px;
-  padding: 18px 24px 36px;
-}
-
-.deadline-header {
-  margin-bottom: 16px;
-
-  h1 {
-    font-size: 26px;
-  }
-}
-
-.popwear-card {
-  padding: 22px 28px;
-  margin-bottom: 16px;
-
-  h2 {
-    font-size: 19px;
-    margin-bottom: 6px;
-  }
-
-  p {
-    margin-bottom: 14px;
-  }
-
-  .form-group {
-    margin-bottom: 12px;
-  }
-
-  .form-control,
-  .form-select {
-    padding: 8px 12px;
-    min-height: 40px;
-  }
-
-  textarea.form-control {
-    min-height: 68px;
-  }
-}
-
-.deadline-form {
-  .form-row {
-    gap: 14px;
-  }
-
-  .form-actions {
-    margin-top: 14px;
-  }
-}
-
-.btn-dark,
-.btn-outline-dark {
-  padding: 8px 18px !important;
-  min-height: 40px;
-}
-
-// ============================================
-// Nouvelle échéance - stylisation flow actuel
-// ============================================
-.deadline-page {
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 20px 24px 40px;
-}
-
-.deadline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-
-  h1 {
-    margin: 0;
-    color: $color-text-dark;
-    font-size: 26px;
-    font-weight: 700;
-  }
-
-  .btn-back {
-    color: $color-text-muted;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-
-    &:hover {
-      color: $color-primary;
-    }
-  }
-}
-
-.popwear-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
-  border-radius: 18px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 22px 28px;
-  margin-bottom: 16px;
-
-  h2 {
-    color: $color-text-dark;
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 6px;
-  }
-
-  p {
-    color: $color-text-muted;
-    font-size: 14px;
-    margin: 0 0 14px;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
-  }
-
-  label,
-  .form-label {
-    color: $color-text-dark;
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  .form-control,
-  .form-select {
-    width: 100%;
-    background-color: $color-bg;
-    border: 1px solid $color-border;
-    border-radius: 10px;
-    padding: 9px 12px;
-    font-size: 14px;
-    color: $color-text-dark;
-
-    &:focus {
-      outline: none;
-      background-color: $color-card;
-      border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
-    }
-  }
-
-  textarea.form-control {
-    min-height: 68px;
-    resize: vertical;
-  }
-}
-
 .ai-badge {
   display: inline-flex;
   width: fit-content;
@@ -895,48 +264,14 @@ h1 {
   font-size: 12px;
 }
 
-.deadline-form {
-  .form-row {
-    display: grid;
-    gap: 14px;
-  }
-
-  .form-row-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-
-  .form-errors {
-    background-color: rgba($urgency-red, 0.08);
-    border-left: 4px solid $urgency-red;
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 18px;
-
-    h2 {
-      color: $urgency-red;
-      font-size: 15px;
-      font-weight: 700;
-      margin: 0 0 8px;
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 20px;
-      color: $color-text-dark;
-      font-size: 14px;
-    }
-  }
-}
-
+// ============================================
+// Page formulaire (new / edit)
+// ============================================
 .deadline-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+
   .btn-dark,
   .btn-outline-dark {
     min-height: 44px;
@@ -946,54 +281,6 @@ h1 {
   }
 }
 
-@media (max-width: 768px) {
-  .deadline-page {
-    padding: 18px 16px 36px;
-  }
-
-  .deadline-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-
-    h1 {
-      font-size: 24px;
-    }
-  }
-
-  .popwear-card {
-    padding: 20px;
-  }
-
-  .deadline-form {
-    .form-row-2 {
-      grid-template-columns: 1fr;
-    }
-
-    .form-actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-
-  .deadline-page {
-    .btn-dark,
-    .btn-outline-dark {
-      width: 100%;
-    }
-  }
-}
-
-// ============================================
-// Correction finale - Nouvelle échéance
-// ============================================
-
-.deadline-page {
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 20px 24px 40px;
-}
-
 .deadline-header {
   display: flex;
   justify-content: space-between;
@@ -1012,18 +299,15 @@ h1 {
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
+    transition: color 0.2s;
 
-    &:hover {
-      color: $color-primary;
-    }
+    &:hover { color: $color-primary; }
   }
 }
 
 .popwear-card {
-  background-color: $color-card;
-  border: 1px solid $color-border;
+  @include card-panel;
   border-radius: 18px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   padding: 22px 28px;
   margin-bottom: 16px;
 
@@ -1063,6 +347,9 @@ h1 {
     padding: 9px 12px;
     font-size: 14px;
     color: $color-text-dark;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+
+    &::placeholder { color: $color-text-muted; }
 
     &:focus {
       outline: none;
@@ -1078,23 +365,8 @@ h1 {
   }
 }
 
-.ai-badge {
-  display: inline-flex;
-  width: fit-content;
-  margin-bottom: 8px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background-color: rgba($color-primary, 0.1);
-  color: $color-primary;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.ai-helper-text {
-  margin-top: 6px;
-  color: $color-text-muted;
-  font-size: 12px;
-}
+.ai-prefill-card    { padding-bottom: 26px; }
+.deadline-form-card { padding-top: 30px; }
 
 .deadline-form {
   .form-row {
@@ -1137,19 +409,350 @@ h1 {
   }
 }
 
-.deadline-page {
-  .btn-dark,
-  .btn-outline-dark {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+// ============================================
+// Page détail (show)
+// ============================================
+.deadline-show-page {
+  max-width: 880px;
+
+  .btn-back {
+    color: $color-text-muted;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover { color: $color-primary; }
   }
 }
 
+.deadline-show {
+  max-width: 960px;
+
+  h1 { color: $color-text-dark; font-weight: 800; }
+  h2 { color: $color-text-dark; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  h3 { color: $color-text-dark; font-size: 18px; font-weight: 700; margin: 0; }
+
+  .show-back-link {
+    .btn {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  .deadline-show-card {
+    background-color: $color-card;
+    border-left: 6px solid $color-border;
+    border-radius: 20px;
+    padding: 28px 32px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+
+    &.urgency-red {
+      border-left-color: $urgency-red;
+      border-right: 4px solid rgba($urgency-red, 0.8);
+    }
+
+    &.urgency-orange {
+      border-left-color: $urgency-orange;
+      border-right: 4px solid rgba($urgency-orange, 0.8);
+    }
+
+    &.urgency-green {
+      border-left-color: $urgency-green;
+      border-right: 4px solid rgba($urgency-green, 0.8);
+    }
+  }
+
+  .deadline-show-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding-bottom: 22px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid $color-border;
+
+    h1 {
+      margin: 0;
+      color: $color-text-dark;
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+  }
+
+  .deadline-header-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .deadline-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .urgency-badge {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+
+    &.urgency-red    { background-color: rgba($urgency-red, 0.12);    color: $urgency-red; }
+    &.urgency-orange { background-color: rgba($urgency-orange, 0.12); color: $urgency-orange; }
+    &.urgency-green  { background-color: rgba($urgency-green, 0.12);  color: $urgency-green; }
+  }
+
+  .deadline-urgency-display {
+    text-align: right;
+
+    span {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    small {
+      display: block;
+      margin-top: 3px;
+      color: $color-text-muted;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    &.urgency-red span    { color: $urgency-red; }
+    &.urgency-orange span { color: $urgency-orange; }
+    &.urgency-green span  { color: $urgency-green; }
+  }
+
+  .deadline-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+
+    .btn,
+    .btn-sm {
+      min-height: 36px;
+      padding: 7px 16px !important;
+      border-radius: 999px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .deadline-info-card {
+    background-color: $color-bg;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 22px;
+
+    h2 {
+      margin: 0 0 18px;
+      color: $color-text-dark;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  .deadline-info-description {
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid $color-border;
+
+    p {
+      margin: 6px 0 0;
+      color: $color-text-dark;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  }
+
+  .deadline-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 28px;
+
+    > div { min-width: 0; }
+
+    p {
+      margin: 5px 0 0;
+      color: $color-text-dark;
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+
+  .info-label {
+    color: $color-text-muted;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .edit-deadline-panel {
+    background-color: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 22px;
+
+    h2 {
+      color: $color-text-dark;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .form-control,
+    .form-select {
+      background-color: $color-card;
+      border: 1px solid $color-border;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 14px;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+      }
+    }
+  }
+
+  .show-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .ai-panel {
+    background-color: #fff7f3;
+    border: 1px solid rgba($color-primary, 0.18);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-top: 18px;
+
+    .ai-badge {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: rgba($color-primary, 0.12);
+      color: $color-primary;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      color: $color-text-dark;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0 0 16px;
+      color: $color-text-muted;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+
+  .generated-message-card {
+    background-color: $color-card;
+    border: 1px solid $color-border;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .generated-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+
+    h3 {
+      margin: 0;
+      color: $color-text-dark;
+      font-size: 16px;
+      font-weight: 800;
+    }
+  }
+
+  .generated-message-content {
+    color: $color-text-dark;
+    line-height: 1.7;
+    font-size: 15px;
+
+    p:last-child { margin-bottom: 0; }
+  }
+}
+
+// ============================================
+// AI estimation card (page show)
+// ============================================
+.ai-estimation-card {
+  @include card-panel;
+  padding: 32px;
+  margin-top: 24px;
+
+  h2 {
+    color: $color-text-dark;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .ai-intro {
+    color: $color-text-muted;
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+
+  .ai-response {
+    margin-top: 24px;
+    border-top: 1px solid $color-border;
+    padding-top: 20px;
+
+    h3 {
+      color: $color-text-dark;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px;
+    }
+
+    .ai-response-body {
+      background-color: $color-bg;
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: $color-text-dark;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+}
+
+// ============================================
+// Responsive
+// ============================================
 @media (max-width: 768px) {
   .deadline-page {
     padding: 18px 16px 36px;
+
+    .btn-dark,
+    .btn-outline-dark {
+      width: 100%;
+    }
   }
 
   .deadline-header {
@@ -1157,19 +760,13 @@ h1 {
     align-items: flex-start;
     gap: 10px;
 
-    h1 {
-      font-size: 24px;
-    }
+    h1 { font-size: 24px; }
   }
 
-  .popwear-card {
-    padding: 20px;
-  }
+  .popwear-card { padding: 20px; }
 
   .deadline-form {
-    .form-row-2 {
-      grid-template-columns: 1fr;
-    }
+    .form-row-2 { grid-template-columns: 1fr; }
 
     .form-actions {
       flex-direction: column;
@@ -1177,10 +774,53 @@ h1 {
     }
   }
 
-  .deadline-page {
-    .btn-dark,
-    .btn-outline-dark {
+  .deadline-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .deadline-show {
+    padding-left: 16px;
+    padding-right: 16px;
+
+    .deadline-show-card { padding: 22px 18px; }
+
+    .deadline-show-header {
+      flex-direction: column;
+      gap: 16px;
+
+      h1 { font-size: 24px; }
+    }
+
+    .deadline-header-side {
       width: 100%;
+      align-items: flex-start;
+    }
+
+    .deadline-urgency-display { text-align: left; }
+
+    .deadline-actions {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+
+      .btn,
+      form,
+      form .btn {
+        width: 100%;
+      }
+    }
+
+    .deadline-info-grid,
+    .show-form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-panel { padding: 20px; }
+
+    .generated-message-header {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 }

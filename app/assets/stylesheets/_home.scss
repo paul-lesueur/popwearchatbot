@@ -38,12 +38,26 @@
   }
 }
 
+// Illustration couture en haut du hero
+.home-illustration {
+  display: block;
+  width: 280px;
+  max-width: 70%;
+  height: auto;
+  margin: 0 auto 16px;
+}
+
+// Logo Popwear (remplace le texte) — volontairement imposant
 .home-title {
-  font-size: 52px;
-  font-weight: 800;
-  color: $text-dark;
-  letter-spacing: -1px;
   margin-bottom: 20px;
+}
+
+.home-logo-img {
+  display: block;
+  width: 360px;
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto;
 }
 
 .home-subtitle {

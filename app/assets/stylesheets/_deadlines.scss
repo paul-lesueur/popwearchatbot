@@ -60,6 +60,19 @@ h1 {
   }
 }
 
+.btn-outline-danger {
+  border-color: $error !important;
+  color: $error !important;
+  background-color: transparent !important;
+  font-weight: 600 !important;
+
+  &:hover {
+    background-color: $error !important;
+    border-color: $error !important;
+    color: white !important;
+  }
+}
+
 // ============================================
 // Cards d'échéances
 // ============================================
@@ -181,10 +194,11 @@ h1 {
 .deadline-actions {
   display: flex;
   align-items: center;
+  gap: 10px;
 
   .btn-sm {
     border-radius: 16px !important;
-    padding: 4px 12px !important;
+    padding: 6px 14px !important;
     font-size: 12px !important;
   }
 }
@@ -501,16 +515,67 @@ h1 {
   border-radius: 16px;
   padding: 32px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+  // Tags catégorie/statut rééquilibrés (plus grands que dans les cartes de l'index)
+  .badge {
+    font-size: 0.875rem;
+    padding: 8px 16px;
+  }
+
+  .urgency-badge {
+    font-weight: 700;
+  }
+
+  // Bordure droite + badge colorés selon l'urgence (même code couleur que les cartes de l'index)
+  &.urgency-red {
+    border-right: 6px solid $urgency-red;
+    .urgency-badge { background-color: rgba($urgency-red, 0.12); color: $urgency-red; }
+  }
+
+  &.urgency-orange {
+    border-right: 6px solid $urgency-orange;
+    .urgency-badge { background-color: rgba($urgency-orange, 0.12); color: $urgency-orange; }
+  }
+
+  &.urgency-green {
+    border-right: 6px solid $urgency-green;
+    .urgency-badge { background-color: rgba($urgency-green, 0.12); color: $urgency-green; }
+  }
+
+  // Boutons Modifier/Supprimer agrandis et espacés (uniquement sur la page show)
+  .deadline-actions {
+    gap: 12px;
+
+    .btn-sm {
+      padding: 8px 18px !important;
+      font-size: 14px !important;
+    }
+  }
 }
 
-.deadline-info-block {
+// Encadré unique regroupant toutes les infos en lecture seule
+.deadline-info-card {
   background-color: $color-bg;
   border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 24px;
+  padding: 24px;
+  margin-bottom: 32px;
+
+  .info-section-title {
+    color: $color-text-muted;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+  }
+}
+
+.deadline-info-description {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $color-border;
 
   p {
-    margin-bottom: 0;
+    margin: 4px 0 0;
     color: $color-text-dark;
     line-height: 1.6;
   }
@@ -519,13 +584,11 @@ h1 {
 .deadline-info-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 16px 24px;
 
   > div {
-    background-color: $color-bg;
-    border-radius: 14px;
-    padding: 16px;
+    background-color: transparent;
+    padding: 0;
   }
 
   p {

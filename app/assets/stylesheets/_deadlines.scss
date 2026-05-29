@@ -196,10 +196,14 @@ h1 {
   align-items: center;
   gap: 10px;
 
+  // Hauteur identique garantie pour Modifier (a) et Supprimer (button) :
+  // mêmes padding, police, interligne et bordure sur les deux.
   .btn-sm {
     border-radius: 16px !important;
     padding: 6px 14px !important;
     font-size: 12px !important;
+    line-height: 1.5 !important;
+    border-width: 1px !important;
   }
 }
 
@@ -578,34 +582,36 @@ h1 {
 
 .deadline-show-card {
   background-color: $color-card;
-  border-left: 6px solid $color-primary;
+  border: 1px solid $color-border;
+  border-left: 6px solid $color-border;
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
-  // Tags catégorie/statut rééquilibrés (plus grands que dans les cartes de l'index)
+  // Tags catégorie/statut rééquilibrés + arrondi identique au design system
   .badge {
     font-size: 0.875rem;
     padding: 8px 16px;
+    border-radius: 12px;
   }
 
   .urgency-badge {
     font-weight: 700;
   }
 
-  // Bordure droite + badge colorés selon l'urgence (même code couleur que les cartes de l'index)
+  // Accent gauche + badge colorés selon l'urgence (identique aux cartes de l'index)
   &.urgency-red {
-    border-right: 6px solid $urgency-red;
+    border-left-color: $urgency-red;
     .urgency-badge { background-color: rgba($urgency-red, 0.12); color: $urgency-red; }
   }
 
   &.urgency-orange {
-    border-right: 6px solid $urgency-orange;
+    border-left-color: $urgency-orange;
     .urgency-badge { background-color: rgba($urgency-orange, 0.12); color: $urgency-orange; }
   }
 
   &.urgency-green {
-    border-right: 6px solid $urgency-green;
+    border-left-color: $urgency-green;
     .urgency-badge { background-color: rgba($urgency-green, 0.12); color: $urgency-green; }
   }
 
@@ -620,10 +626,12 @@ h1 {
   }
 }
 
-// Encadré unique regroupant toutes les infos en lecture seule
+// Encadré unique regroupant toutes les infos en lecture seule (style cartes page New)
 .deadline-info-card {
-  background-color: $color-bg;
-  border-radius: 14px;
+  background-color: $color-card;
+  border: 1px solid $color-border;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   padding: 24px;
   margin-bottom: 32px;
 
@@ -672,14 +680,15 @@ h1 {
 }
 
 .ai-panel {
-  background-color: #fff7f3;
-  border: 1px solid rgba(255, 107, 53, 0.18);
+  background-color: $color-card;
+  border: 1px solid $color-border;
   border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   padding: 24px;
   margin-top: 24px;
 
   p {
-    color: #6f5b5b;
+    color: $color-text-muted;
     margin-bottom: 16px;
   }
 }

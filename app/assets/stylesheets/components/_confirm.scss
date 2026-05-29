@@ -1,0 +1,57 @@
+// Boîte de confirmation stylée (remplace le confirm() natif du navigateur)
+.app-confirm {
+  border: none;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 420px;
+  width: calc(100% - 32px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  color: $text-dark;
+
+  &::backdrop {
+    background-color: rgba($secondary, 0.45);
+    backdrop-filter: blur(2px);
+  }
+
+  .app-confirm__message {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+
+  .app-confirm__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  button {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .app-confirm__cancel {
+    background-color: transparent;
+    border: 1px solid $border-color;
+    color: $text-dark;
+
+    &:hover {
+      background-color: $bg-light;
+    }
+  }
+
+  .app-confirm__confirm {
+    background-color: $error;
+    border: 1px solid $error;
+    color: $white;
+
+    &:hover {
+      background-color: darken($error, 8%);
+    }
+  }
+}

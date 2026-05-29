@@ -10,7 +10,7 @@
 
         <div class="d-flex gap-2 flex-wrap">
           <span class="badge bg-secondary"><%= @deadline.category.humanize %></span>
-          <span class="badge bg-light"><%= @deadline.status.humanize %></span>
+          <span class="badge bg-light"><%= status_label(@deadline.status) %></span>
         </div>
       </div>
 
@@ -52,7 +52,7 @@
 
       <div>
         <span class="info-label">Statut</span>
-        <p><%= @deadline.status.humanize %></p>
+        <p><%= status_label(@deadline.status) %></p>
       </div>
 
       <% if @deadline.estimated_duration.present? %>

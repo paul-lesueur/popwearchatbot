@@ -26,5 +26,15 @@
   <body>
       <%= render "shared/navbar" %>
     <%= yield %>
+
+    <dialog id="confirm-dialog" class="app-confirm">
+      <form method="dialog">
+        <p class="app-confirm__message" data-confirm-message></p>
+        <div class="app-confirm__actions">
+          <button value="cancel" class="app-confirm__cancel">Annuler</button>
+          <button value="confirm" class="app-confirm__confirm">Confirmer</button>
+        </div>
+      </form>
+    </dialog>
   </body>
 </html>
